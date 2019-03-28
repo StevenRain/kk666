@@ -1,6 +1,6 @@
 spring:
   application:
-    name: reptile-service
+    name: kk666-service
 
 server:
   port: 8855
