@@ -10,10 +10,8 @@
         <module name="kk666" />
       </profile>
     </annotationProcessing>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="kk666" options="-parameters" />
-    </option>
+    <bytecodeTargetLevel>
+      <module name="kk666" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

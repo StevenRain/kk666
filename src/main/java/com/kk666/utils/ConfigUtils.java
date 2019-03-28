@@ -31,7 +31,11 @@ public class ConfigUtils {
 
     public static List<UserDto> getAllUserDtoList() {
         List<String> lines = getAllLines();
-        return lines.stream().filter(line -> !line.startsWith("#")).map(line -> {
+        return lines.stream()
+                .filter(line -> !line.startsWith("#"))
+                .filter(line -> !line.startsWith("\n"))
+                .filter(line -> !line.startsWith(""))
+                .map(line -> {
             String[] array = line.split(",");
             UserDto userDto = UserDto.builder()
                     .domain(array[0])

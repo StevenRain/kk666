@@ -106,7 +106,6 @@ public class UserUtils {
             }else {
                 log.error("game = {}, issue = {}, playId = 前三-组三复式, domain = {}, username = {}, price = {} 投注失败, response = {}", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price, response1);
             }
-            SleepUtils.sleep(500);
 
             log.info("正在投注 game = {}, issue = {}, playId = 后三-组三复式, domain = {}, username = {}, price = {}", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price);
             String response2 = HttpUtils.sendPostByJsonData(url, headerMap, bettingData2);
@@ -115,7 +114,6 @@ public class UserUtils {
             }else {
                 log.error("game = {}, issue = {}, playId = 后三-组三复式, domain = {}, username = {}, price = {} 投注失败, response = {}", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price, response2);
             }
-            SleepUtils.sleep(500);
         });
     }
 
@@ -139,7 +137,6 @@ public class UserUtils {
         }else {
             log.error("game = {}, issueNo = {}, domain = {}, username = {}, price = {} 投注失败", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price);
         }
-        SleepUtils.sleep(1000);
     }
 
     public static String getWithdrawOrder(UserDto userDto) {
