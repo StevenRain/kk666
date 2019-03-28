@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: reptile-service
+
+server:
+  port: 8855
+  context-path: /kk666/betting

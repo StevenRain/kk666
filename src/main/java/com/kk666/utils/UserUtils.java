@@ -95,13 +95,12 @@ public class UserUtils {
         headerMap.put("fr", "9");
         headerMap.put("tk", userDto.getToken());
 
-        IntStream.rangeClosed(0, 9).parallel().forEach(index -> {
+        IntStream.rangeClosed(0, 9).forEach(index -> {
             String bettingData1 = String.format(bettingPattern1, gameIdEnum.getGameId(), index, index, price, price * 2, issueNo);
             String bettingData2 = String.format(bettingPattern2, gameIdEnum.getGameId(), index, index, price, price * 2, issueNo);
 
             log.info("正在投注 game = {}, issue = {}, playId = 前三-组三复式, domain = {}, username = {}, price = {}", gameIdEnum.getGameName(),issueNo, userDto.getDomain(), userDto.getUsername(), price);
             String response1 = HttpUtils.sendPostByJsonData(url, headerMap, bettingData1);
-            log.info(response1);
             if(response1.contains("200")) {
                 log.info("game = {}, issue = {}, playId = 前三-组三复式, domain = {}, username = {}, price = {} 投注成功", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price);
             }else {
@@ -110,7 +109,6 @@ public class UserUtils {
 
             log.info("正在投注 game = {}, issue = {}, playId = 后三-组三复式, domain = {}, username = {}, price = {}", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price);
             String response2 = HttpUtils.sendPostByJsonData(url, headerMap, bettingData2);
-            log.info(response2);
             if(response2.contains("200")) {
                 log.info("game = {}, issue = {}, playId = 后三-组三复式, domain = {}, username = {}, price = {} 投注成功", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price);
             }else {
