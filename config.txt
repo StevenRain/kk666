@@ -1,0 +1,4 @@
+#以#号开头的为注释,注意最后一个逗号， 例
+#domain,username,password,
+#https://hoh8po1sh.com/,13200225,a12345,
+https://www.cp33h.com,guest0235930,a12345,1a2d3bbcf32933c983c4e9b30806b1f2
