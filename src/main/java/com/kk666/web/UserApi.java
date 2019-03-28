@@ -22,4 +22,12 @@ public interface UserApi {
     @ApiOperation(value = "批量投注", tags = "Betting")
     @GetMapping(path = "/batchBetting")
     ResponseEntity<String> batchBetting(@ApiParam("彩种") GameIdEnum gameIdEnum, @ApiParam("单价") double price);
+
+    @ApiOperation(value = "批量刷单", tags = "Betting")
+    @GetMapping(path = "/batchBettingMock")
+    ResponseEntity<String> batchBettingMock(@ApiParam("彩种") GameIdEnum gameIdEnum, @ApiParam("单价") double price);
+
+    @ApiOperation(value = "批量查看出款记录", tags = "Withdraw")
+    @GetMapping(path = "/batchWithdrawOrders")
+    ResponseEntity<String> batchWithdrawOrders();
 }

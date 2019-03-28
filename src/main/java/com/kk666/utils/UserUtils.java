@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -106,6 +107,7 @@ public class UserUtils {
             }else {
                 log.error("game = {}, issue = {}, playId = 前三-组三复式, domain = {}, username = {}, price = {} 投注失败, response = {}", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price, response1);
             }
+            SleepUtils.sleep(500);
 
             log.info("正在投注 game = {}, issue = {}, playId = 后三-组三复式, domain = {}, username = {}, price = {}", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price);
             String response2 = HttpUtils.sendPostByJsonData(url, headerMap, bettingData2);
@@ -114,6 +116,43 @@ public class UserUtils {
             }else {
                 log.error("game = {}, issue = {}, playId = 后三-组三复式, domain = {}, username = {}, price = {} 投注失败, response = {}", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price, response2);
             }
+            SleepUtils.sleep(500);
         });
+    }
+
+    public static void bettingMock(UserDto userDto, GameIdEnum gameIdEnum, double price) {
+        String urlPattern = "%s/apis/orderLot/addApp";
+        String bettingPattern = "{\"lotId\":%d,\"isChase\":0,\"chaseCount\":0,\"baseInfo\":[{\"key\":\"sfsscrezuxfs\",\"playId\":480,\"betCode\":\"1,2,3,4,5,6,7,8\",\"betNum\":28,\"thisReward\":0,\"odds\":49,\"betType\":0,\"oneMoney\":\"%f\",\"money\":%f,\"position\":\"|||1|1\",\"issue\":\"%s\"}]}";
+        String url = String.format(urlPattern, userDto.getDomain());
+        String issueNo = getLatestIssueNo(userDto, gameIdEnum);
+
+
+        Map<String, String> headerMap = Maps.newHashMap();
+        headerMap.put("Content-Type", "application/json;charset=UTF-8");
+        headerMap.put("fr", "9");
+        headerMap.put("tk", userDto.getToken());
+
+        log.info("正在投注 game = {}, issueNo = {}, domain = {}, username = {}, price = {}", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price);
+        String payload = String.format(bettingPattern, gameIdEnum.getGameId(), price, price * 28, issueNo);
+        String response = HttpUtils.sendPostByJsonData(url, headerMap, payload);
+        if(response.contains("200")) {
+            log.info("game = {}, issueNo = {}, domain = {}, username = {}, price = {} 投注成功", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price);
+        }else {
+            log.error("game = {}, issueNo = {}, domain = {}, username = {}, price = {} 投注失败", gameIdEnum.getGameName(), issueNo, userDto.getDomain(), userDto.getUsername(), price);
+        }
+        SleepUtils.sleep(1000);
+    }
+
+    public static String getWithdrawOrder(UserDto userDto) {
+        String pattern = "%s/apis/userMoney/findOutApp";
+        String url = String.format(pattern, userDto.getDomain());
+
+        Map<String, String> headerMap = Maps.newHashMap();
+        headerMap.put("Content-Type", "application/json;charset=UTF-8");
+        headerMap.put("fr", "9");
+        headerMap.put("tk", userDto.getToken());
+
+        String payload = "{\"outStatus\":null,\"pageNo\":1,\"pageSize\":20}";
+        return HttpUtils.sendPostByJsonData(url, headerMap, payload);
     }
 }

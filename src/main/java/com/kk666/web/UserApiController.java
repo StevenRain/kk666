@@ -25,7 +25,7 @@ public class UserApiController implements UserApi {
         List<UserDto> userDtoList = ConfigUtils.getAllUserDtoList();
         StringBuilder builder = new StringBuilder();
         String pattern = "domain = %s, username = %s, balance = %f\n";
-        userDtoList.forEach(userDto -> {
+        userDtoList.parallelStream().forEach(userDto -> {
             double balance = UserUtils.getBalance(userDto);
             builder.append(String.format(pattern, userDto.getDomain(), userDto.getUsername(), balance));
         });
@@ -37,5 +37,24 @@ public class UserApiController implements UserApi {
         List<UserDto> userDtoList = ConfigUtils.getAllUserDtoList();
         userDtoList.parallelStream().forEach(userDto -> UserUtils.betting(userDto, gameIdEnum, price));
         return ResponseEntity.ok("投注完成，投注结果请看日志!");
+    }
+
+    @Override
+    public ResponseEntity<String> batchBettingMock(GameIdEnum gameIdEnum, double price) {
+        List<UserDto> userDtoList = ConfigUtils.getAllUserDtoList();
+        userDtoList.parallelStream().forEach(userDto -> UserUtils.bettingMock(userDto, gameIdEnum, price));
+        return ResponseEntity.ok("本次刷单完成，刷单结果请看日志!");
+    }
+
+    @Override
+    public ResponseEntity<String> batchWithdrawOrders() {
+        List<UserDto> userDtoList = ConfigUtils.getAllUserDtoList();
+        StringBuilder builder = new StringBuilder();
+        String pattern = "domain = %s, username = %s, response = %s\n";
+        userDtoList.parallelStream().forEach(userDto -> {
+            String response = UserUtils.getWithdrawOrder(userDto);
+            builder.append(String.format(pattern, userDto.getDomain(), userDto.getUsername(), response));
+        });
+        return ResponseEntity.ok(builder.toString());
     }
 }
