@@ -73,14 +73,27 @@ public class UserApiController implements UserApi {
         List<WithdrawResponseDto> withdrawResponseDtoList = userDtoList.parallelStream().map(userDto -> {
             String response = UserUtils.getWithdrawOrder(userDto);
             if(response.contains("resultList")) {
-                JsonObject recordJson = new JsonParser().parse(response).getAsJsonObject().getAsJsonObject("data").getAsJsonArray("resultList").iterator().next().getAsJsonObject();
-                String createTime = recordJson.get("createTime").getAsString();
-                double amount = recordJson.get("infactMoney").getAsDouble();
-                String status = recordJson.get("status").getAsString();
-                status = function.apply(status);
-                return WithdrawResponseDto.builder().time(createTime).amount(amount).status(status).domain(userDto.getDomain()).username(userDto.getUsername()).build();
+                try {
+                    JsonObject recordJson = new JsonParser().parse(response).getAsJsonObject().getAsJsonObject("data").getAsJsonArray("resultList").iterator().next().getAsJsonObject();
+                    String createTime = recordJson.get("createTime").getAsString();
+                    double amount = recordJson.get("infactMoney").getAsDouble();
+                    String status = recordJson.get("status").getAsString();
+                    status = function.apply(status);
+                    double balance = UserUtils.getBalance(userDto);
+                    return WithdrawResponseDto.builder()
+                            .time(createTime)
+                            .amount(amount)
+                            .status(status)
+                            .domain(userDto.getDomain())
+                            .username(userDto.getUsername())
+                            .password(userDto.getPassword())
+                            .balance(balance).build();
+                }catch (Exception e) {
+                    log.error("{}", e);
+                    return WithdrawResponseDto.builder().status("查询失败").domain(userDto.getDomain()).username(userDto.getUsername()).balance(0.0).build();
+                }
             }else {
-                return WithdrawResponseDto.builder().status("查询失败").domain(userDto.getDomain()).username(userDto.getUsername()).build();
+                return WithdrawResponseDto.builder().status("查询失败").domain(userDto.getDomain()).username(userDto.getUsername()).balance(0.0).build();
             }
         }).collect(Collectors.toList());
         return ResponseEntity.ok(withdrawResponseDtoList);

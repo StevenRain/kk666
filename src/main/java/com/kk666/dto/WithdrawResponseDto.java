@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 public class WithdrawResponseDto {
     private String domain;
     private String username;
+    private String password;
     private String time;
     private double amount;
     private String status;
+    private double balance;
 }
