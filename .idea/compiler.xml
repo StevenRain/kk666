@@ -10,8 +10,5 @@
         <module name="kk666" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="kk666" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -34,7 +34,6 @@ public class ConfigUtils {
         return lines.stream()
                 .filter(line -> !line.startsWith("#"))
                 .filter(line -> !line.startsWith("\n"))
-                .filter(line -> !line.startsWith(""))
                 .map(line -> {
             String[] array = line.split(",");
             UserDto userDto = UserDto.builder()
